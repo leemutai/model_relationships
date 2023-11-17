@@ -1,16 +1,16 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+# Create your views here.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from main.models import Artist, Song
+from main.models import Song, Artist
 from main.serializers import ArtistSerializer, ArtistAlbumSerializer
 
 
-# Create your views here.
 def show(request):
     # artist = Artist.objects.order_by("?").first()
-    # print(Artist)
+    # print(artist)
     # albums = artist.album_set.all()
     # print(albums)
     # for alb in albums:
@@ -18,10 +18,7 @@ def show(request):
     #     songs = alb.songs.all()
     #     print(len(songs), "Songs")
     #     for s in songs:
-    #         print("Song -" , s.title, s.duration)
-    #     print("Songs are ", songs)
-    # print("Hello")
-
+    #         print("Song -", s.title, s.duration)
     song = Song.objects.order_by("?").first()
     print(song)
     album = song.album
@@ -29,12 +26,14 @@ def show(request):
     artists = album.artists.all().values("name")
     print(artists)
 
-    song.album.artists.all()
+    # song.album.artists.all()
 
     return HttpResponse(artists)
 
 
-@api_view(["GET", "POST"])  # elastics search,celery, redis cache
+# elastic search, celery, redis cache,
+# python manage.py runserver
+@api_view(["GET", "POST"])  # /api/artists
 def save_or_fetch_artists(request):
     if request.method == "GET":
         artists = Artist.objects.all()
@@ -46,8 +45,6 @@ def save_or_fetch_artists(request):
             serializer.save()
             return Response({"message": "Added artist", "data": serializer.data})
 
-    return None
-
 
 @api_view(["GET"])
 def fetch_one_artist(request, id):
@@ -57,6 +54,7 @@ def fetch_one_artist(request, id):
         return Response(serializer.data)
     except:
         return Response({"error": "Artist not found"}, status=404)
+
 
 @api_view(["DELETE"])
 def delete_artist(request, id):
@@ -68,7 +66,7 @@ def delete_artist(request, id):
         return Response({"error": "Artist not found"}, status=404)
 
 
-@api_view(["PUT", "PATCH"])
+@api_view(["PUT", "PATCH"])  # {"name": "Tom Juma"}
 def update_artist(request, id):
     try:
         artist = Artist.objects.get(pk=id)
@@ -77,19 +75,18 @@ def update_artist(request, id):
             serializer.save()
         return Response(serializer.data)
     except:
-        return Response({"error": "Invalid data"}, status=404)
+        return Response({"error": "Invalid Data"}, status=404)
 
 
-@api_view
+@api_view(["GET"])
 def albums_for_artist(request, id):
     try:
         artist = Artist.objects.get(pk=id)
         serializer = ArtistAlbumSerializer(instance=artist)
-
         return Response(serializer.data)
     except:
-        return Response({"error": "Invalid data"}, status=404)
-
-
+        return Response({"error": "Invalid Data"}, status=404)
 
 # pip install djangorestframework
+# RESTful services -- apis  GET, POST , PUT, PATCH , DELETE
+# SOAP services xml

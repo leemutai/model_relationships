@@ -1,5 +1,5 @@
 """
-URL configuration for model_relationships project.
+URL configuration for dmodel_relationships project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -16,20 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 
 from main import views
 
 urlpatterns = [
     path('', views.show, name="home"),
     path('api/artists', views.save_or_fetch_artists, name="save_or_fetch_artists"),
-    path('api/artists/<int:id>', views.fetch_one_artist, name="fetch_one_artists"),
-    path('api/artists/<int:id>/delete', views.delete_artist, name="views.delete_artists"),
-    path('api/artists/<int:id>/update', views.update_artist, name="views.update_artists"),
-    path('api/artists/<int:id>/albums', views.albums_for_artist, name="views.albums_for_artists"),
+    path('api/artists/<int:id>', views.fetch_one_artist, name="fetch_one_artist"),
+    path('api/artists/<int:id>/delete', views.delete_artist, name="delete_artist"),
+    path('api/artists/<int:id>/update', views.update_artist, name="update_artist"),
+    path('api/artists/<int:id>/albums', views.albums_for_artist, name="albums_for_artist"),
+    path('api/auth', obtain_auth_token, name="get_auth_token"),
+
     path('admin/', admin.site.urls),
 ]
-# api/artists -> fetch artists ->GET
-# api/artists -> create the  artists ->POST
-# api/artists/18 -> details of 1 the  artists ->get
-# api/artists/18/delete -> details of 1 the  artists ->DELETE
-# api/artists/18/UPDATE -> details of 1 the  artists ->PUT/PATCH
+
+# api/artists  ->fetch the artists ->GET
+# api/artists  ->create the artists ->POST
+# api/artists/18  ->details of 1 artists ->GET
+# api/artists/18/delete  ->delete of 1 artists -> DELETE
+# api/artists/18/update  ->delete of 1 artists -> PUT/PATCH
