@@ -1,5 +1,5 @@
 """
-URL configuration for dmodel_relationships project.
+URL configuration for models_relationships project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
 
 from main import views
 
@@ -27,13 +26,12 @@ urlpatterns = [
     path('api/artists/<int:id>/delete', views.delete_artist, name="delete_artist"),
     path('api/artists/<int:id>/update', views.update_artist, name="update_artist"),
     path('api/artists/<int:id>/albums', views.albums_for_artist, name="albums_for_artist"),
-    path('api/auth', obtain_auth_token, name="get_auth_token"),
 
     path('admin/', admin.site.urls),
 ]
 
-# api/artists  ->fetch the artists ->GET
-# api/artists  ->create the artists ->POST
-# api/artists/18  ->details of 1 artists ->GET
-# api/artists/18/delete  ->delete of 1 artists -> DELETE
-# api/artists/18/update  ->delete of 1 artists -> PUT/PATCH
+# api/artists -> fetch the artists -> GET
+# api/artists -> create the artists -> POST
+# api/artists/18 -> details of 1 artist -> GET
+# api/artists/18/delete -> DELETE  artist -> DELETE
+# api/artists/18/update -> DELETE  artist -> PUT/PATCH
